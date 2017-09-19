@@ -13,6 +13,6 @@ Phys. Rev. A 34, 5080 – Published 1 December 1986
 
 The form for the double well potential (page 34, RHS, third paragraph starting 'Another example is the double-well...'), should read
 
-`V(x)=-\frac{1}{2} x^2 + \frac{1}{4} g x^4 + \frac{1}{4}g`.
+`V(x)=-\frac{1}{2} x^2 + \frac{1}{4} g x^4 + \frac{1}{4g}`.
 
 Strangely this is correct in the captions of figure 2 and 3!
