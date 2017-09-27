@@ -1,13 +1,21 @@
+# FeynmanKleinert
+
+[![Build Status](https://travis-ci.org/jarvist/FeynmanKleinert.jl.svg?branch=master)](https://travis-ci.org/jarvist/FeynmanKleinert.jl)
+
+[![Coverage Status](https://coveralls.io/repos/jarvist/FeynmanKleinert.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/jarvist/FeynmanKleinert.jl?branch=master)
+
+[![codecov.io](http://codecov.io/github/jarvist/FeynmanKleinert.jl/coverage.svg?branch=master)](http://codecov.io/github/jarvist/FeynmanKleinert.jl?branch=master)
+
+
 ## A work in progress - beware, dragons!
 
-# Feynman-Kleinert-1986-PRA
 Workbook to reimplement Feynman and Klenert's 1986 PRA "Effective classical partition function"
 
 https://doi.org/10.1103/PhysRevA.34.5080
 
 Effective classical partition functions.
 R. P. Feynman and H. Kleinert. 
-Phys. Rev. A 34, 5080 – Published 1 December 1986
+Phys. Rev. A 34, 5080 â Published 1 December 1986
 
 ### Errata 
 
