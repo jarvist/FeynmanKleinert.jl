@@ -8,7 +8,15 @@
 ## A work in progress - beware, dragons!
 
 These codes implement Feynman and Klenert's 1986 PRA "Effective classical
-partition function" methods. In Gribbin's biography (see
+partition function" methods. 
+This method addsc quantum effects to a classical potential, by simply smearing the bare potential with a Gaussian kernel. 
+
+The clever bit is in solving the quantum problem with path integration. The full integrals cannot be calculated exactly, but a an approximate harmonic integral can be solved exactly. As with Feynman's polaron solution, a variational connection is made, allowing one freedom to vary the parameters of the approximate harmonic system to minimise a free energy. Having done this, you have an 'effective classical potential' (W) which can be integrated over to get the partition function, etc. 
+
+This method contains most of the quantum-fuzziness, but misses out details of the state symmetry and tunnelling behaviour. This is most notable in the errors for the ground state. 
+
+
+In Gribbin's biography (see
 [http://users.physik.fu-berlin.de/~kleinert/kleinert/?p=feynman]), it's
 mentioned that they used a Sinclair ZX Spectrum to run the codes on. This is
 the same computer I learnt to program with. I fear I'm rather using
