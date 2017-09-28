@@ -9,13 +9,44 @@
 
 ## A work in progress - beware, dragons!
 
-Workbook to reimplement Feynman and Klenert's 1986 PRA "Effective classical partition function"
+These codes implement Feynman and Klenert's 1986 PRA "Effective classical
+partition function" methods. In Gribbin's biography (see
+[http://users.physik.fu-berlin.de/~kleinert/kleinert/?p=feynman]), it's
+mentioned that they used a Sinclair ZX Spectrum to run the codes on. This is
+the same computer I learnt to program with. I fear I'm rather using
+a sledgehammer to crack a walnut, turning the power of Julia and automatic
+differentiation against the poor thing!
 
-https://doi.org/10.1103/PhysRevA.34.5080
+Motivation is:
+ - because it's cool
+ - this might be useful
+   - initially for calculating tunnelling and delocalisation of the nuclear
+     wavefunction in double wells (dynamic stabilisation of soft modes in
+     perovskites)
+   - the idea of smearing out the potential, is exactly what I've been doing
+     for semi-classical models of recombination
+   - maybe it could be extended to n-dimensional problems, such as a full set
+     of anharmonic phonons
 
+### Literature
+
+Central paper is [https://doi.org/10.1103/PhysRevA.34.5080 ]
 Effective classical partition functions.
 R. P. Feynman and H. Kleinert. 
-Phys. Rev. A 34, 5080 â Published 1 December 1986
+Phys. Rev. A 34, 5080.  Published 1 December 1986
+
+Kleinert followed this up in:
+
+H. Kleinert
+Improving the Variational Approach to Path Integrals
+Phys. Lett. B 280, 251 (1992)
+
+and
+
+H. Kleinert
+Systematic Corrections to Variational Calculation of Effective Classical
+Potential
+Phys. Lett. A 173, 332 (1993)
 
 ### Errata 
 
