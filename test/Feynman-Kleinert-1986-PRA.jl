@@ -30,6 +30,11 @@ g=0.1976
 V(x,g)=-0.5*x^2 + 0.25*g*x^4 + 0.25/g
 V(x)=V(x,g)
 
+# Hold my beer - I'm going to try metaprogramming
+macro doublewell(g)
+    return :(x -> 0.5*x^2 + 0.25*g*x^4 + 0.25/g)
+end
+
 # Anharmonic potential, following Kleinhert's book (p. 471); Also Figure 1 Feynman-Kleinert
 #V(x,g)=x^2/2+x^4*g/4
 
@@ -38,6 +43,7 @@ V(x)=V(x,g)
 
 println("V(0.0) = ",V(0.0,g))
 println("Va2(0.0,1.0) = ",Va2(0.0,1.0,V))
+println("Wtilde(0.0,4,4,V,β=$β) = ",Wtilde(0.0,1.0,4,V,β))
 
 using Plots
 
@@ -79,7 +85,7 @@ end
 # Replot fits from Feynman-Kleinert Table II
 # - basically checking whether the Wtilde equation is reporting correctly, 
 # and whether (as described in the caption) only Wtilde for g=0.1976 has double well structure 
-@printf("Feynman-Kleinert Table II reads:\n g      E0=Wtilde\n 0.1976 0.650 \n 0.4    0.549 \n 4.0    0.598 \n 40.0   1.409\n")
+@printf("\n\nFeynman-Kleinert Table II reads:\n g      E0=Wtilde\n 0.1976 0.650 \n 0.4    0.549 \n 4.0    0.598 \n 40.0   1.409\n")
 β=3000
 # Much higher than this, and results collapse to Inf. But essentially agrees with Table II now!
 
@@ -87,20 +93,20 @@ end
 xrange=-4:0.1:4
 # These values, from Feynman and Kleinhert, table II
 g=0.1976
-@printf("\n%f %f",g,Wtilde(1.943,0.397,1.255,V,β))
-plot(x->Wtilde(x,0.397,1.255,g,β),xrange,label="g=0.1976") 
+@printf("\n%f %f",g,Wtilde(1.943,0.397,1.255,@doublewell(g),β))
+plot(x->Wtilde(x,0.397,1.255,@doublewell(g),β),xrange,label="g=0.1976") 
 
 g=0.4
-@printf("\n%f %f",g,Wtilde(0.0,1.030,0.486,V,β))
-plot!(x->Wtilde(x,1.030,0.486,g,β),xrange,label="g=0.4") 
+@printf("\n%f %f",g,Wtilde(0.0,1.030,0.486,@doublewell(g),β))
+plot!(x->Wtilde(x,1.030,0.486,@doublewell(g),β),xrange,label="g=0.4") 
 
 g=4.0
-@printf("\n%f %f",g,Wtilde(0.0,0.3059,1.634,V,β))
-plot!(x->Wtilde(x,0.3059,1.634,g,β),xrange,label="g=4.0")
+@printf("\n%f %f",g,Wtilde(0.0,0.3059,1.634,@doublewell(g),β))
+plot!(x->Wtilde(x,0.3059,1.634,@doublewell(g),β),xrange,label="g=4.0")
 
 g=40.0
 @printf("\n%f %f",g,Wtilde(0.0,0.1306,3.829,V,β))
-plot!(x->Wtilde(x,0.1306,3.829,g,β),xrange,label="g=40.0")
+plot!(x->Wtilde(x,0.1306,3.829,@doublewell(g),β),xrange,label="g=40.0")
 
 plot!(ylim=(-2,10)) # force plot in notebook
 
@@ -118,10 +124,12 @@ xrange=-2:0.05:2
 plot(size=(400,500),fmt=:png) # force aspect ratio; 
     # use PNG as changing size seems to break whatever the default is (SVG?)
 for g in [.2, .3,.35,.4,.6] # straight lines in Fig 3.
-    plot!(x->W(x/sqrt(g),V,β), xrange, label="g=$g") 
+    plot!(x->W(x/sqrt(g),@doublewell(g),β), xrange, label="g=$g") 
         # Note scaling of x-range within fn. argument
-    plot!(x->V(x/sqrt(g),V), xrange, label="", linestyle = :dash) 
+    myV=@doublewell(g)
+    plot!(x->myV(x/sqrt(g)), xrange, label="", linestyle = :dash) 
         # Bare potential = infinite Temperature
 end
 plot!(ylim=(0,1.25)) # same as Fig 3 scale
 
+savefig("figure3.png")

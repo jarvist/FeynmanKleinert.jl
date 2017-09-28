@@ -32,7 +32,7 @@ function Wtilde(x0,a2,Ω,V,β)
     else
         F=(1/β)*( log(sinh(D)/D) ) # explicit evaluation, naively as written in (5)
     end
-    V0=Va2(x0,a2,V())[1]
+    V0=Va2(x0,a2,V)[1]
     mid=(Ω^2/2) * a2
     return F-mid+V0
 end
@@ -72,11 +72,16 @@ function W(x0,g,β)
     lower=[0.0]
     upper=[5.0]
     initial=[1.0]
+    
+    res=optimize(OnceDifferentiable(myf, initial; autodiff = :forward), initial, lower, upper, Fminbox(); 
+    optimizer=GradientDescent)
 
-    res=optimize(OnceDifferentiable(myf), 
-        initial, lower, upper, Fminbox(); 
-        optimizer=GradientDescent, 
-        optimizer_o=(Optim.Options(autodiff=true,allow_f_increases=true)) )
+# Old version using Optim v. 0.7.8 ; leaving here just in case those specific methods were useful
+#    res=optimize(OnceDifferentiable(myf), 
+#        initial, lower, upper, Fminbox(); 
+#        optimizer=GradientDescent, 
+#        optimizer_o=(Optim.Options(autodiff=true,allow_f_increases=true)) )
+
     minimum=Optim.minimum(res)
     Ω=Optim.minimizer(res)[1]
     mya2=a2(Ω)[1]
