@@ -27,21 +27,24 @@ g=0.1976
 
 # Potential energy curves - V(x) functions
 # Double well potential as given in figure 2 + 3 captions
-V(x,g)=-0.5*x^2 + 0.25*g*x^4 + 0.25/g
-V(x)=V(x,g)
-
 # Hold my beer - I'm going to try metaprogramming
 macro doublewell(g)
-    return :(x -> 0.5*x^2 + 0.25*g*x^4 + 0.25/g)
+    return :(x -> -0.5*x^2 + 0.25*g*x^4 + 0.25/g)
 end
 
 # Anharmonic potential, following Kleinhert's book (p. 471); Also Figure 1 Feynman-Kleinert
-#V(x,g)=x^2/2+x^4*g/4
+macro anharmonicwell(g)
+    return :(x^2/2+x^4*g/4)
+end
 
 # Harmonic oscillator - simple soln
-#V(x,g)=0.5*x^2
+macro harmonicwell(g)
+    return :(0.5*x^2)
+end
 
-println("V(0.0) = ",V(0.0,g))
+V=@doublewell(g)
+println("@doublewell test. g=$g β=$β ")
+println("V(0.0) = ",V(0.0))
 println("Va2(0.0,1.0) = ",Va2(0.0,1.0,V))
 println("Wtilde(0.0,4,4,V,β=$β) = ",Wtilde(0.0,1.0,4,V,β))
 
@@ -54,7 +57,7 @@ using Plots
 #
 xrange=-3:0.1:3
 #
-plot(x->V(x,g),xrange,label="V") # bare [potential]
+plot(x->V(x),xrange,label="V") # bare [potential]
 #
 for a2 in 0.5 #:0.1:0.5 # Gaussian smearing widths to apply
     plot!(x->Va2(x,a2,V)[1],xrange,label="Va2, a2=$a2")
@@ -89,6 +92,7 @@ end
 β=3000
 # Much higher than this, and results collapse to Inf. But essentially agrees with Table II now!
 
+@printf("\nI calculate, β=%g: ",β)
 # Wtilde(x0,a2,Ω)
 xrange=-4:0.1:4
 # These values, from Feynman and Kleinhert, table II
@@ -109,6 +113,7 @@ g=40.0
 plot!(x->Wtilde(x,0.1306,3.829,@doublewell(g),β),xrange,label="g=40.0")
 
 plot!(ylim=(-2,10)) # force plot in notebook
+@printf("\n")
 
 ### OK - let's go for the big one!
 # Try and reproduce Fig 3; Double-well for varying g.
@@ -123,11 +128,10 @@ xrange=-2:0.05:2
 
 plot(size=(400,500),fmt=:png) # force aspect ratio; 
     # use PNG as changing size seems to break whatever the default is (SVG?)
-for g in [.2, .3,.35,.4,.6] # straight lines in Fig 3.
+for g in [.2, .3,.35,.4,.6] # range of g used in Fig 3. (look carefully at unbroken lines)
     plot!(x->W(x/sqrt(g),@doublewell(g),β), xrange, label="g=$g") 
         # Note scaling of x-range within fn. argument
-    myV=@doublewell(g)
-    plot!(x->myV(x/sqrt(g)), xrange, label="", linestyle = :dash) 
+    plot!(x->@doublewell(g)(x/sqrt(g)), xrange, label="", linestyle = :dash) 
         # Bare potential = infinite Temperature
 end
 plot!(ylim=(0,1.25)) # same as Fig 3 scale
