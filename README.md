@@ -4,24 +4,21 @@
 [![Coverage Status](https://coveralls.io/repos/jarvist/FeynmanKleinert.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/jarvist/FeynmanKleinert.jl?branch=master)
 [![codecov.io](http://codecov.io/github/jarvist/FeynmanKleinert.jl/coverage.svg?branch=master)](http://codecov.io/github/jarvist/FeynmanKleinert.jl?branch=master)
 
-
 ## A work in progress - beware, dragons!
 
-These codes implement Feynman and Klenert's 1986 PRA "Effective classical
-partition function" methods. 
-This method addsc quantum effects to a classical potential, by simply smearing the bare potential with a Gaussian kernel. 
+These codes implement Feynman and Klenert's 1986 PRA "Effective classical partition function", as a set of Julia codes which can operate on arbitrary 1D potentials. Variational optimisation is provided by automatic differentiation (forward mode) of the 'auxillary potential' Wtilde.   
 
-The clever bit is in solving the quantum problem with path integration. The full integrals cannot be calculated exactly, but a an approximate harmonic integral can be solved exactly. As with Feynman's polaron solution, a variational connection is made, allowing one freedom to vary the parameters of the approximate harmonic system to minimise a free energy. Having done this, you have an 'effective classical potential' (W) which can be integrated over to get the partition function, etc. 
+This method 'approximates the classical potential from below', by a simple Gaussian smearing procedure applied to the bare (classical) potential. The method is variational.
+
+The full quantum problem is solved by path integration. The exact integrals cannot be solved, but an approximate harmonic integral can be solved exactly. As with Feynman's polaron solution, a variational connection is made, allowing one freedom to vary the parameters of the approximate harmonic system to minimise a free energy. Having done this, you have an 'effective classical potential' (W) which can be integrated over to get the partition function, etc. 
 
 This method contains most of the quantum-fuzziness, but misses out details of the state symmetry and tunnelling behaviour. This is most notable in the errors for the ground state. 
 
 
 In Gribbin's biography (see
-[http://users.physik.fu-berlin.de/~kleinert/kleinert/?p=feynman]), it's
-mentioned that they used a Sinclair ZX Spectrum to run the codes on. This is
-the same computer I learnt to program with. I fear I'm rather using
-a sledgehammer to crack a walnut, turning the power of Julia and automatic
-differentiation against the poor thing!
+[http://users.physik.fu-berlin.de/~kleinert/kleinert/?p=feynman]), it is mentioned 
+mentioned that they used a Sinclair ZX Spectrum to run the codes on. (The same 8-bit 1980s home-computer I learnt to program with!) 
+Using Julia & automatic-differentiation on this problem is perhaps slightly over the top - but as the methods are available and seem robust and more than fast enough, they will do!
 
 But at least we can plot the figures in colour these days.
 
@@ -50,7 +47,7 @@ Phys. Rev. A 34, 5080.  Published 1 December 1986
 This introduces the method, which grows out of the variational approach described in referenced 1 therein, which is the Path Integral book by Feynman and Hibbs (section 10.3, as referenced within the text). 
 Here they apply the method to two test cases of an anharmonic potential, and a double well potential. They also mention applying it to singular potentials, briefly give a Green's Function for response to an external perturbation, and show how it can be generalised to higher dimensions. 
 
-Kleinert followed this up with two publications in the early 1990s, which added higher-order diagrams and significantly reduced the error for the ground state. 
+Kleinert followed this up with two publications in the early 1990s, which added higher-order diagrams and significantly reduced the error for the ground state. Kleinert describes the second paper in his book as 'a systematic and uniformaly convergent variational perturbation expansion'.
 
 H. Kleinert
 Improving the Variational Approach to Path Integrals
@@ -62,6 +59,11 @@ H. Kleinert
 Systematic Corrections to Variational Calculation of Effective Classical
 Potential
 Phys. Lett. A 173, 332 (1993)
+
+H. Kleinert
+Path Integratls
+5th Edition (2009)
+Chapter 5 - Variational Perturbation Theory
 
 ### Errata 
 [https://doi.org/10.1103/PhysRevA.34.5080 ]
