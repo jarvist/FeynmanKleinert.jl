@@ -3,6 +3,8 @@
 #
 # Workbook to reimplement Feynman and Klenert's 1986 PRA "Effective classical partition function"
 
+push!(LOAD_PATH,"../src/") # load module from local directory
+
 using FeynmanKleinert
 
 # https://doi.org/10.1103/PhysRevA.34.5080
