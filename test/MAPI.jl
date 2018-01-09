@@ -62,22 +62,26 @@ plot!(ylim=(0,1.25)) # same as Fig 3 scale
 
 savefig("MAPI.png")
 
-g=.2 # detailed analysis + partition fn. calc on this g=
+g=.3 # detailed analysis + partition fn. calc on this g=
+β=50
+
 
 import QuadGK.quadgk
 
 # This is horribly small as minimum in energy is offset ^^^ upwards.
-Z,Zerr=quadgk(x->exp(-β*W(x/sqrt(g),@doublewell(g),β))/sqrt(2*π*β), -2, 2)
-println("Quantum Partition Function Z=$Z")
+Zq,Zerr=quadgk(x->exp(-β*W(x/sqrt(g),@doublewell(g),β))/sqrt(2*π*β), -2, 2)
+println("Quantum Partition Function Z=$Zq")
 
-Z,Zerr=quadgk(x->exp(-β*(W(x/sqrt(g),@doublewell(g),β)-0.7))/sqrt(2*π*β), -2, 2)
+Zqfudge,Zerr=quadgk(x->exp(-β*(W(x/sqrt(g),@doublewell(g),β)-0.7))/sqrt(2*π*β), -2, 2)
 # Did I actually just do that?
-println("Quantum Partition W-0.7 Function Z=$Z")
+println("Quantum Partition W-0.7 Function Z=$Zqfudge")
 
 
-Z,Zerr=quadgk(x->exp(-β*@doublewell(g)(x/sqrt(g)))/sqrt(2*π*β), -2, 2)
-println("Classical Partition Function Z=$Z")
+Zc,Zerr=quadgk(x->exp(-β*@doublewell(g)(x/sqrt(g)))/sqrt(2*π*β), -2, 2)
+println("Classical Partition Function Z=$Zc")
 
+# Effective classical potential, eval'd for x
+U=x->W(x/sqrt(g),@doublewell(g),β)
 
 classical=x->@doublewell(g)(x/sqrt(g))
 
@@ -87,4 +91,12 @@ plot!(classical,xrange,label="Classical Pot")
 plot!(ylim=(0,1.25)) # same as Fig 3 scale
 
 savefig("MAPI-detailed.png")
+
+xrange=-2:0.01:2 # For the plots; this to agree with FeynmanKleinertPRA
+plot(size=(1200,600),fmt=:png) # force aspect ratio;
+plot!(x->exp(-U(x)*β)/Zq,xrange,label="Quantum PDF")
+plot!(x->exp(-classical(x)*β)/Zc,xrange,label="Classical PDF")
+
+
+savefig("PDF.png")
 
