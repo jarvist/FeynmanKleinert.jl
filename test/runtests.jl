@@ -2,4 +2,5 @@ using FeynmanKleinert
 using Base.Test
 
 # write your own tests here
-@test 1 == 2
+include("Feynman-Kleinert-1986-PRA-Table2.jl")
+
