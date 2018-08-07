@@ -2,8 +2,6 @@ module FeynmanKleinert
 
 # Bring out the major leagues... https://www.youtube.com/watch?v=_E6DDktoPhg
 using Optim
-# Pkg.status("Optim.jl") --> Optim                         0.7.8              pinned.250b50ab.tmp
-# I've pinned this to a weird old version... must update signature at some point to the new bindings
 
 using QuadGK # For numerical integration
 
@@ -23,7 +21,10 @@ Va2(x,a2,V)=quadgk(xp->K(xp,x,a2,V), -Inf, +Inf) #, reltol=0, abstol=1e-5)
 """
     Wtilde(x0,a2,Ω,V,β)
 
-(5) in Feynman and Kleinert. Switches depending on D=β*Ω/2 to use either an exponential approximation for sinh(x) (D>7.5) or an explicit evaluation and then take logarithms. Without doing this you get collapse to infinity for large β.
+(5) in Feynman and Kleinert. Switches depending on D=β*Ω/2 to use either an
+exponential approximation for sinh(x) (D>7.5) or an explicit evaluation and
+then take logarithms. Without doing this you get collapse to infinity for large
+β.  
 """
 function Wtilde(x0,a2,Ω,V,β)
     D=β*Ω/2
@@ -61,26 +62,22 @@ end
 
     Implementing optimisation / minimisation described in Feynman-Kleinert (6)
     Calculates optimal W for x0, with given g and Beta
-    Let's try and use (7) (a2 in terms of omega) to fix prior problems...
+    Use's (7) (a2 in terms of omega) to fix numerical noise from trying to do
+    it directly...  
 """
 function W(x0,g,β)
     #println("W(x0=$x0,g=$g,β=$β)")
     
     a2(Ω)=1/(β*Ω^2)*( (β*Ω)/2 * coth(β*Ω/2)-1 ) #(7)
     myf(x)=Wtilde(x0,a2(x[1]),x[1],g,β)
-    
+
+    # Define bounds on solution
     lower=[0.0]
     upper=[5.0]
     initial=[1.0]
     
     res=optimize(OnceDifferentiable(myf, initial; autodiff = :forward), initial, lower, upper, Fminbox(); 
     optimizer=GradientDescent)
-
-# Old version using Optim v. 0.7.8 ; leaving here just in case those specific methods were useful
-#    res=optimize(OnceDifferentiable(myf), 
-#        initial, lower, upper, Fminbox(); 
-#        optimizer=GradientDescent, 
-#        optimizer_o=(Optim.Options(autodiff=true,allow_f_increases=true)) )
 
     minimum=Optim.minimum(res)
     Ω=Optim.minimizer(res)[1]
@@ -92,3 +89,4 @@ end
 
 
 end # module
+
